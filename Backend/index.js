@@ -1,13 +1,17 @@
 import express from 'express'
-const app=express()   // craete an instance
-
+const app=express()  
 
 app.get('/',(req,res)=>{
-    res.send("Hello This is from Express JS")
+    const url=req.url
+    res.send("Hello This is from Express JS"+url)
 })
 
-app.post("/add",(req,res)=>{
-    res.send("Hello this is post method")
+app.get("/add",(req,res)=>{
+    const url=req.params 
+    const search=req.query
+    console.log(search);
+    
+    res.send("Hello this is post method  ")
 })
 
 app.put("/put",(req,res)=>{
