@@ -11,6 +11,7 @@ import { InputText } from 'primereact/inputtext';
 export default function ShowData() {
     const [data, setData] = useState([]);
     const [visible, setVisible] = useState(false);
+    const [isEdit, setIsEdit] = useState(false)
 
     const FetchData = async () => {
         const res = await axios.get('http://localhost:4000/get');
@@ -25,7 +26,8 @@ export default function ShowData() {
         name: '',
         email: '',
         age: '',
-        gender: ''
+        gender: '',
+        password: ""
     });
 
     const genderOptions = [
@@ -58,6 +60,7 @@ export default function ShowData() {
     };
 
     const handleEditMode = (rowData) => {
+        setIsEdit(true)
         setVisible(true);
         setEditData(rowData);
     };
@@ -73,54 +76,74 @@ export default function ShowData() {
         FetchData();
     };
 
+    const handleAddMode = () => {
+        setIsEdit(false)
+        setVisible(true);
+    }
+    const handleAdd = async() => {
+    // console.log("test");
+    const res=await axios.post('http://localhost:4000/add',editData)
+    console.log(res);
+    setVisible(false)
+    FetchData() 
+    }
     return (
-        <div className="card">
-            <DataTable value={data} emptyMessage="No customers found.">
-                <Column field="name" header="Name" />
-                <Column field="email" header="Email" />
-                <Column field="age" header="Age" />
-                <Column field="gender" header="Gender" />
-                <Column field="password" header="Password" />
-                <Column field="isBlocked" header="Status" />
-                <Column body={actionTemplate} header="Action" />
-            </DataTable>
+        <>
+            <Button label="Add" onClick={() => {handleAddMode()}} style={{ float: "right", marginRight: "40px" }} />
+            <div className="card" style={{ padding: "20px", width: "80%", margin: "40px auto" }}>
+                <DataTable value={data} emptyMessage="No customers found.">
+                    <Column field="name" header="Name" />
+                    <Column field="email" header="Email" />
+                    <Column field="age" header="Age" />
+                    <Column field="gender" header="Gender" />
+                    <Column field="password" header="Password" />
+                    <Column field="isBlocked" header="Status" />
+                    <Column body={actionTemplate} header="Action" />
+                </DataTable>
 
-            <Dialog header="Edit User" visible={visible} style={{ width: '40vw' }} onHide={() => setVisible(false)}>
-                <div className="field">
-                    <label>Name</label>
-                    <InputText
-                        value={editData.name}
-                        onChange={(e) => handleInputChange(e, "name")}
-                    />
-                    <br /><br />
+                <Dialog header="Edit User" visible={visible} style={{ width: '40vw' }} onHide={() => setVisible(false)}>
+                    <div className="field">
+                        <label>Name</label>
+                        <InputText
+                            value={editData.name}
+                            onChange={(e) => handleInputChange(e, "name")}
+                        />
+                        <br /><br />
 
-                    <label>Email</label>
-                    <InputText
-                        value={editData.email}
-                        onChange={(e) => handleInputChange(e, "email")}
-                    />
-                    <br /><br />
+                        <label>Email</label>
+                        <InputText
+                            value={editData.email}
+                            onChange={(e) => handleInputChange(e, "email")}
+                        />
+                        <br /><br />
 
-                    <label>Age</label>
-                    <InputText
-                        value={editData.age}
-                        onChange={(e) => handleInputChange(e, "age")}
-                    />
-                    <br /><br />
+                        <label>Age</label>
+                        <InputText
+                            value={editData.age}
+                            onChange={(e) => handleInputChange(e, "age")}
+                        />
+                        <br /><br />
+                        <label>Password</label>
+                        <InputText
+                            value={editData.password}
+                            onChange={(e) => handleInputChange(e, "password")}
+                        />
+                        <br /><br />
 
-                    <label>Gender</label>
-                    <Dropdown
-                        value={editData.gender}
-                        options={genderOptions}
-                        onChange={(e) => setEditData({ ...editData, gender: e.value })}
-                        placeholder="Select Gender"
-                        className="w-full"
-                    />
-                    <br /><br />
+                        <label>Gender</label>
+                        <Dropdown
+                            value={editData.gender}
+                            options={genderOptions}
+                            onChange={(e) => setEditData({ ...editData, gender: e.value })}
+                            placeholder="Select Gender"
+                            className="w-full"
+                        />
+                        <br /><br />
+                        <Button label={isEdit?"Update":"Add"} onClick={()=>(isEdit?handleUpdate():handleAdd())} />
+                    </div>
+                </Dialog>
+            </div>
 
-                    <Button label="Update" onClick={handleUpdate} />
-                </div>
-            </Dialog>
-        </div>
+        </>
     );
 }
