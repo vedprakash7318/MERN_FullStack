@@ -20,7 +20,7 @@ Mongo :- NoSQL DB
     (middleware)
 4)  Mongoose Coonection
 4)  Data save/ delete / update / get
-5)  Image Upload  
+5)  Image Upload   (multer, claudinary)
 6)  JWT
 7)  OTP Validation
 8)  Google Login

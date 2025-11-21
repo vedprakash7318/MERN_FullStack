@@ -7,9 +7,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 cloudinary.config({
-    cloud_name: "dazumf2fc",
-    api_key: "936979368812817",
-    api_secret: "2Q81L1UbrQelnxUgeG_QTGxgSn8"
+    cloud_name: "d",
+    api_key: "9369",
+    api_secret: "2"
 })
 const upload = multer({ storage: memoryStorage() });
 
